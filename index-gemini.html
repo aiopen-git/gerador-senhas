@@ -1,0 +1,362 @@
+<!-- 
+AIOpen - Inteligência Artificial para Todos
+Ferramenta: Gerador de Senhas
+Site: https://www.aiopen.com.br
+GitHub: https://github.com/aiopen-git
+Por: Marcos Henrique
+https://www.linkedin.com/in/user-marcoshenrique
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senhas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+            overflow-x: hidden; /* Prevent horizontal scroll on small screens due to animations */
+        }
+
+        .password-generator-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 550px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            font-weight: 900;
+            color: #f0f0f0; /* Lighter color for title */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 1.5rem;
+        }
+        
+        .password-display-area {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        #generatedPassword {
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding-right: 45px; /* Space for copy button */
+            background-color: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            opacity: 0; /* Initially hidden for animation */
+            transform: translateY(20px); /* Initially moved down for animation */
+        }
+
+        #generatedPassword.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        #generatedPassword::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .btn-copy-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #f0f0f0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .btn-copy-icon:hover {
+            color: #a7f3d0; /* Light green for hover */
+        }
+        
+        .btn-fun {
+            background: linear-gradient(45deg, #f857a6, #ff5858);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .btn-fun:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .form-check-input:checked {
+            background-color: #f857a6;
+            border-color: #f857a6;
+        }
+        
+        .form-check-input:focus {
+            box-shadow: 0 0 0 0.25rem rgba(248, 87, 166, 0.5);
+        }
+
+        .form-check-label {
+            font-size: 1rem;
+            color: #e0e0e0; /* Slightly darker for better readability */
+        }
+        
+        .form-range::-webkit-slider-thumb {
+            background-color: #f857a6;
+        }
+        .form-range::-moz-range-thumb {
+            background-color: #f857a6;
+        }
+        .form-range::-ms-thumb {
+            background-color: #f857a6;
+        }
+
+        #copyNotification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745; /* Success green */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1050;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            visibility: hidden;
+        }
+
+        #copyNotification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-10px); /* Slide up slightly */
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .option-icon {
+            margin-right: 8px;
+            color: #f857a6; /* Use accent color for icons */
+            animation: iconFloat 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes iconFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Ensure form-check elements align well in grid */
+        .form-check {
+            display: flex;
+            align-items: center;
+        }
+        .form-check-input {
+            margin-top: 0; /* Align checkbox with label */
+            margin-right: 0.5rem;
+        }
+
+        /* Custom styling for length value display */
+        #lengthValue {
+            font-weight: bold;
+            color: #f857a6;
+            margin-left: 0.5rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="password-generator-container text-center">
+        <h1><i class="fas fa-shield-alt me-2"></i>Gerador de Senhas</h1>
+
+        <div class="password-display-area mb-4">
+            <input type="text" class="form-control form-control-lg text-center" id="generatedPassword" placeholder="Sua senha segura aparecerá aqui!" readonly>
+            <button class="btn-copy-icon" id="copyButton" aria-label="Copiar Senha">
+                <i class="far fa-clipboard"></i>
+            </button>
+        </div>
+
+        <div class="mb-3">
+            <label for="passwordLength" class="form-label">Comprimento da Senha: <span id="lengthValue">12</span></label>
+            <input type="range" class="form-range" min="8" max="32" value="12" id="passwordLength">
+        </div>
+
+        <div class="options-grid mb-4">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="includeUppercase" checked>
+                <label class="form-check-label" for="includeUppercase"><i class="fas fa-font option-icon"></i>Incluir Maiúsculas</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="includeLowercase" checked>
+                <label class="form-check-label" for="includeLowercase"><i class="fas fa-font option-icon" style="animation-delay: 0.2s;"></i>Incluir Minúsculas</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="includeNumbers" checked>
+                <label class="form-check-label" for="includeNumbers"><i class="fas fa-hashtag option-icon" style="animation-delay: 0.4s;"></i>Incluir Números</label>
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="includeSymbols" checked>
+                <label class="form-check-label" for="includeSymbols"><i class="fas fa-at option-icon" style="animation-delay: 0.6s;"></i>Incluir Símbolos</label>
+            </div>
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100 btn-fun" id="generateButton">
+            <i class="fas fa-bolt me-2"></i>Gerar Senha
+        </button>
+    </div>
+
+    <div id="copyNotification">Senha copiada com sucesso! <i class="fas fa-check-circle"></i></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <script>
+        // DOM Elements
+        const generatedPasswordEl = document.getElementById('generatedPassword');
+        const passwordLengthEl = document.getElementById('passwordLength');
+        const lengthValueEl = document.getElementById('lengthValue');
+        const includeUppercaseEl = document.getElementById('includeUppercase');
+        const includeLowercaseEl = document.getElementById('includeLowercase');
+        const includeNumbersEl = document.getElementById('includeNumbers');
+        const includeSymbolsEl = document.getElementById('includeSymbols');
+        const generateButton = document.getElementById('generateButton');
+        const copyButton = document.getElementById('copyButton');
+        const copyNotificationEl = document.getElementById('copyNotification');
+
+        // Character sets
+        const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+        const numberChars = '0123456789';
+        const symbolChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+        // Update length value display
+        passwordLengthEl.addEventListener('input', () => {
+            lengthValueEl.textContent = passwordLengthEl.value;
+        });
+
+        // Generate Password Function
+        function generatePassword() {
+            const length = parseInt(passwordLengthEl.value);
+            let characterPool = '';
+            let password = '';
+
+            if (includeUppercaseEl.checked) characterPool += uppercaseChars;
+            if (includeLowercaseEl.checked) characterPool += lowercaseChars;
+            if (includeNumbersEl.checked) characterPool += numberChars;
+            if (includeSymbolsEl.checked) characterPool += symbolChars;
+
+            if (characterPool === '') {
+                // If no options are selected, display a message in the password field
+                generatedPasswordEl.value = 'Selecione uma opção!';
+                generatedPasswordEl.classList.add('is-invalid'); // Optional: Bootstrap error style
+                // Remove animation classes if they were there
+                generatedPasswordEl.classList.remove('visible');
+                // Trigger reflow to restart animation if re-enabled
+                void generatedPasswordEl.offsetWidth; 
+                generatedPasswordEl.classList.add('visible');
+                return;
+            } else {
+                generatedPasswordEl.classList.remove('is-invalid');
+            }
+
+            // Ensure password contains at least one of each selected type if possible
+            // This makes passwords stronger but can be complex for very short lengths
+            // For simplicity, we'll randomly pick from the pool for now.
+            // A more robust approach would ensure one of each selected type.
+            
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characterPool.length);
+                password += characterPool[randomIndex];
+            }
+            
+            // Animate password display
+            generatedPasswordEl.classList.remove('visible');
+            // Trigger reflow to allow re-applying the animation
+            void generatedPasswordEl.offsetWidth; 
+            generatedPasswordEl.value = password;
+            generatedPasswordEl.classList.add('visible');
+        }
+
+        // Copy to Clipboard Function
+        function copyToClipboard() {
+            if (!generatedPasswordEl.value || generatedPasswordEl.value === 'Selecione uma opção!') {
+                // Don't copy if there's no password or it's an error message
+                return;
+            }
+            
+            // Create a temporary textarea to copy from, as execCommand works best with selected text in an input/textarea
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = generatedPasswordEl.value;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+
+            try {
+                document.execCommand('copy');
+                showCopyNotification();
+            } catch (err) {
+                console.error('Falha ao copiar senha: ', err);
+                // Fallback or error message if needed, though execCommand is usually reliable for copy
+                alert('Não foi possível copiar a senha. Por favor, copie manualmente.');
+            }
+            document.body.removeChild(tempTextArea);
+        }
+
+        // Show Copy Notification
+        function showCopyNotification() {
+            copyNotificationEl.classList.add('show');
+            setTimeout(() => {
+                copyNotificationEl.classList.remove('show');
+            }, 2500); // Hide after 2.5 seconds
+        }
+
+        // Event Listeners
+        generateButton.addEventListener('click', generatePassword);
+        copyButton.addEventListener('click', copyToClipboard);
+
+        // Initial password generation on load (optional)
+        // generatePassword(); 
+    </script>
+</body>
+</html>

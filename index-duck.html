@@ -1,0 +1,93 @@
+<!-- 
+AIOpen - Inteligência Artificial para Todos
+Ferramenta: Gerador de Senhas
+Site: https://www.aiopen.com.br
+GitHub: https://github.com/aiopen-git
+Por: Marcos Henrique
+https://www.linkedin.com/in/user-marcoshenrique
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senhas</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .password-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+            margin: 20px 0;
+            display: none;
+            transition: opacity 0.5s ease;
+        }
+        .btn-pulsar {
+            animation: pulsar 1.5s infinite;
+        }
+        @keyframes pulsar {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .alert {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container text-center">
+    <h1 class="mb-4">Gerador de Senhas</h1>
+    <button id="gerarSenha" class="btn btn-primary btn-lg btn-pulsar">Gerar Senha</button>
+    <div class="password-display" id="senhaDisplay"></div>
+    <button id="copiarSenha" class="btn btn-success btn-lg">Copiar <i class="fas fa-clipboard"></i></button>
+    <div class="alert alert-success mt-3" id="alerta">Senha copiada com sucesso!</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
+<script>
+    function gerarSenha(tamanho = 12) {
+        const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?";
+        let senha = "";
+        for (let i = 0; i < tamanho; i++) {
+            const indice = Math.floor(Math.random() * caracteres.length);
+            senha += caracteres.charAt(indice);
+        }
+        return senha;
+    }
+
+    document.getElementById('gerarSenha').addEventListener('click', function() {
+        const senha = gerarSenha();
+        const senhaDisplay = document.getElementById('senhaDisplay');
+        senhaDisplay.textContent = senha;
+        senhaDisplay.style.display = 'block';
+        senhaDisplay.style.opacity = 0;
+        setTimeout(() => {
+            senhaDisplay.style.opacity = 1;
+        }, 10);
+    });
+
+    document.getElementById('copiarSenha').addEventListener('click', function() {
+        const senha = document.getElementById('senhaDisplay').textContent;
+        navigator.clipboard.writeText(senha).then(() => {
+            const alerta = document.getElementById('alerta');
+            alerta.style.display = 'block';
+            setTimeout(() => {
+                alerta.style.display = 'none';
+            }, 2000);
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!-- 
+AIOpen - Inteligência Artificial para Todos
+Ferramenta: Gerador de Senhas
+Site: https://www.aiopen.com.br
+GitHub: https://github.com/aiopen-git
+Por: Marcos Henrique
+https://www.linkedin.com/in/user-marcoshenrique
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senhas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Fonte alegre -->
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6e48aa;
+            --secondary-color: #9d50bb;
+            --accent-color: #4776E6;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #4BB543;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Comic Neue', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            animation: gradientBG 15s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .btn-generate {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .btn-generate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(110, 72, 170, 0.6);
+        }
+        
+        .btn-generate:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-copy {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-copy:hover {
+            background-color: #3a62c4;
+            transform: translateY(-2px);
+        }
+        
+        .password-display {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: rgba(248, 249, 250, 0.7);
+            border: 2px dashed #ccc;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.5s ease;
+            word-break: break-all;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-check-label {
+            user-select: none;
+            cursor: pointer;
+        }
+        
+        .form-range::-webkit-slider-thumb {
+            background: var(--primary-color);
+        }
+        
+        .toast-copy {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 250px;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out, fadeOut 0.5s ease-out 2.5s;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .icon-animate {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+        
+        .strength-meter {
+            height: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .strength-weak {
+            background-color: #ff4444;
+            width: 25%;
+        }
+        
+        .strength-medium {
+            background-color: #ffbb33;
+            width: 50%;
+        }
+        
+        .strength-strong {
+            background-color: #00C851;
+            width: 75%;
+        }
+        
+        .strength-very-strong {
+            background-color: #007E33;
+            width: 100%;
+        }
+        
+        .settings-icon {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .settings-icon:hover {
+            transform: rotate(45deg);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-lock me-2"></i> Gerador de Senhas
+                    </div>
+                    <div class="card-body">
+                        <div class="password-display" id="passwordDisplay">
+                            <i class="fas fa-key floating" style="font-size: 2rem; color: var(--primary-color);"></i>
+                            <p class="mt-2 mb-0">Sua senha aparecerá aqui</p>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-4">
+                            <button class="btn btn-generate" id="generateBtn">
+                                <i class="fas fa-bolt me-2"></i> Gerar Senha
+                            </button>
+                            <button class="btn btn-copy" id="copyBtn" disabled>
+                                <i class="fas fa-copy me-2"></i> Copiar
+                            </button>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="lengthRange" class="form-label">Tamanho: <span id="lengthValue">12</span> caracteres</label>
+                            <input type="range" class="form-range" min="4" max="32" value="12" id="lengthRange">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Força da senha:</label>
+                            <div class="strength-meter" id="strengthMeter"></div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="uppercaseCheck" checked>
+                                <label class="form-check-label" for="uppercaseCheck">Letras maiúsculas (A-Z)</label>
+                            </div>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="lowercaseCheck" checked>
+                                <label class="form-check-label" for="lowercaseCheck">Letras minúsculas (a-z)</label>
+                            </div>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="numbersCheck" checked>
+                                <label class="form-check-label" for="numbersCheck">Números (0-9)</label>
+                            </div>
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" id="symbolsCheck" checked>
+                                <label class="form-check-label" for="symbolsCheck">Símbolos (!@#$%^&*)</label>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <small class="text-muted">
+                                <i class="fas fa-shield-alt me-2 icon-animate"></i> 
+                                Sua senha é gerada localmente e nunca é enviada para nossos servidores.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast-copy" id="toastCopy">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-check-circle me-2" style="font-size: 1.5rem;"></i>
+            <span>Senha copiada com sucesso!</span>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS e Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos DOM
+            const passwordDisplay = document.getElementById('passwordDisplay');
+            const generateBtn = document.getElementById('generateBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const lengthRange = document.getElementById('lengthRange');
+            const lengthValue = document.getElementById('lengthValue');
+            const uppercaseCheck = document.getElementById('uppercaseCheck');
+            const lowercaseCheck = document.getElementById('lowercaseCheck');
+            const numbersCheck = document.getElementById('numbersCheck');
+            const symbolsCheck = document.getElementById('symbolsCheck');
+            const strengthMeter = document.getElementById('strengthMeter');
+            const toastCopy = document.getElementById('toastCopy');
+            
+            // Atualizar valor do range
+            lengthRange.addEventListener('input', function() {
+                lengthValue.textContent = this.value;
+                updateStrengthMeter();
+            });
+            
+            // Atualizar medidor de força quando as opções mudam
+            [uppercaseCheck, lowercaseCheck, numbersCheck, symbolsCheck].forEach(checkbox => {
+                checkbox.addEventListener('change', updateStrengthMeter);
+            });
+            
+            // Gerar senha
+            generateBtn.addEventListener('click', function() {
+                const length = parseInt(lengthRange.value);
+                const hasUpper = uppercaseCheck.checked;
+                const hasLower = lowercaseCheck.checked;
+                const hasNumber = numbersCheck.checked;
+                const hasSymbol = symbolsCheck.checked;
+                
+                // Verificar se pelo menos uma opção está selecionada
+                if (!hasUpper && !hasLower && !hasNumber && !hasSymbol) {
+                    alert('Por favor, selecione pelo menos um tipo de caractere para sua senha.');
+                    return;
+                }
+                
+                const password = generatePassword(length, hasUpper, hasLower, hasNumber, hasSymbol);
+                
+                // Exibir senha com animação
+                passwordDisplay.innerHTML = `<span class="fade-in">${password}</span>`;
+                passwordDisplay.style.backgroundColor = 'rgba(157, 80, 187, 0.1)';
+                passwordDisplay.style.border = '2px solid var(--secondary-color)';
+                
+                // Habilitar botão de copiar
+                copyBtn.disabled = false;
+                
+                // Atualizar medidor de força
+                updateStrengthMeter();
+            });
+            
+            // Copiar senha
+            copyBtn.addEventListener('click', function() {
+                const password = passwordDisplay.textContent.trim();
+                
+                if (password && password !== 'Sua senha aparecerá aqui') {
+                    navigator.clipboard.writeText(password).then(function() {
+                        // Mostrar toast de confirmação
+                        toastCopy.style.display = 'block';
+                        setTimeout(function() {
+                            toastCopy.style.display = 'none';
+                        }, 3000);
+                    }).catch(function(err) {
+                        console.error('Erro ao copiar senha: ', err);
+                    });
+                }
+            });
+            
+            // Função para gerar senha
+            function generatePassword(length, hasUpper, hasLower, hasNumber, hasSymbol) {
+                let chars = '';
+                const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                const lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+                const numberChars = '0123456789';
+                const symbolChars = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+                
+                if (hasUpper) chars += upperChars;
+                if (hasLower) chars += lowerChars;
+                if (hasNumber) chars += numberChars;
+                if (hasSymbol) chars += symbolChars;
+                
+                let password = '';
+                for (let i = 0; i < length; i++) {
+                    const randomIndex = Math.floor(Math.random() * chars.length);
+                    password += chars[randomIndex];
+                }
+                
+                return password;
+            }
+            
+            // Função para atualizar o medidor de força
+            function updateStrengthMeter() {
+                const length = parseInt(lengthRange.value);
+                const hasUpper = uppercaseCheck.checked;
+                const hasLower = lowercaseCheck.checked;
+                const hasNumber = numbersCheck.checked;
+                const hasSymbol = symbolsCheck.checked;
+                
+                // Calcular pontuação de força (0-100)
+                let score = 0;
+                
+                // Pontuação por comprimento
+                score += Math.min(length * 3, 60); // Máximo 60 pontos para comprimento
+                
+                // Pontuação por tipos de caracteres
+                const charTypes = [hasUpper, hasLower, hasNumber, hasSymbol].filter(Boolean).length;
+                score += (charTypes - 1) * 10; // 0-30 pontos
+                
+                // Ajustar para escala 0-100
+                score = Math.min(score, 100);
+                
+                // Atualizar medidor visual
+                strengthMeter.className = 'strength-meter';
+                
+                if (score < 30) {
+                    strengthMeter.classList.add('strength-weak');
+                } else if (score < 60) {
+                    strengthMeter.classList.add('strength-medium');
+                } else if (score < 85) {
+                    strengthMeter.classList.add('strength-strong');
+                } else {
+                    strengthMeter.classList.add('strength-very-strong');
+                }
+            }
+            
+            // Inicializar medidor de força
+            updateStrengthMeter();
+        });
+    </script>
+</body>
+</html>
